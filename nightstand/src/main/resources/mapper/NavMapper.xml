@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.NavMapper">
+    <resultMap id="baseNavResMap" type="com.jimmy.entity.Nav">
+        <id column="id" property="id"/>
+        <result column="url" property="url"/>
+        <result column="path" property="path"/>
+        <result column="component" property="component"/>
+        <result column="name" property="name"/>
+        <result column="iconCls" property="iconCls"/>
+        <result column="parentId" property="parentId"/>
+        <result column="enabled" property="enabled"/>
+        <association property="meta" javaType="com.jimmy.entity.Meta">
+            <result column="keepAlive" property="keepAlive"/>
+            <result column="requireAuth" property="requireAuth"/>
+        </association>
+    </resultMap>
+    <resultMap id="NavWithRoles" type="com.jimmy.entity.Nav" extends="baseNavResMap">
+        <collection property="navRoles" ofType="com.jimmy.entity.Role">
+            <id column="rid" property="id"/>
+            <result column="rname" property="name"/>
+        </collection>
+    </resultMap>
+    <resultMap id="NavWithChildren" type="com.jimmy.entity.Nav" extends="baseNavResMap">
+        <collection property="children" ofType="com.jimmy.entity.Nav">
+            <id column="id2" property="id"/>
+            <result column="url2" property="url"/>
+            <result column="path2" property="path"/>
+            <result column="component2" property="component"/>
+            <result column="name2" property="name"/>
+            <result column="iconCls2" property="iconCls"/>
+            <result column="parentId2" property="parentId"/>
+            <result column="enabled2" property="enabled"/>
+            <association property="meta" javaType="com.jimmy.entity.Meta">
+                <result column="keepAlive2" property="keepAlive"/>
+                <result column="requireAuth2" property="requireAuth"/>
+            </association>
+        </collection>
+    </resultMap>
+
+    <select id="findAll" resultMap="NavWithRoles">
+        select n.*, r.id as rid, r.name as rname from nav n, role r, nav_role mid
+        where n.id = mid.nid and r.id = mid.rid
+        order by n.id
+    </select>
+
+    <select id="getNavByRoles" parameterType="java.util.Set" resultMap="NavWithChildren">
+        select DISTINCT  n1.*, n2.id as id2, n2.url as url2, n2.component as component2,
+        n2.enabled as enabled2, n2.iconCls as iconCls2, n2.parentId as parentId2,
+        n2.name as name2, n2.parentId as parentId2, n2.path as path2,
+        n2.keepAlive as keepAlive2, n2.requireAuth as requireAuth2
+        from nav n1, nav n2,nav_role nr
+        where n1.id = n2.parentId and nr.rid
+        <foreach collection="roles" index="i" item="item" open="in (" separator="," close=")">
+            #{item.id}
+        </foreach>
+        and n2.enabled = true
+        ORDER BY n1.id, n2.id
+    </select>
+
+</mapper>

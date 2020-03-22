@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.WaitingMapper">
+    <resultMap id="baseResMap" type="com.jimmy.entity.Waiting">
+        <id column="id" property="id"/>
+        <result column="uid" property="uid"/>
+        <result column="eventId" property="eventId"/>
+        <result column="eventType" property="eventType"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+    <sql id="Params">
+        id, uid, eventId, eventType, title
+    </sql>
+
+    <select id="findByUid" resultMap="baseResMap" parameterType="int">
+        select * from waiting where uid = #{uid}
+    </select>
+
+    <select id="findByPage" resultMap="baseResMap">
+        select w.* from waiting w
+        where w.uid = #{waiting.uid}
+        <if test="waiting.eventType!=null">
+            and w.eventType = #{waiting.eventType}
+        </if>
+        limit #{start}, #{size}
+    </select>
+
+    <select id="getTotal" resultType="int" parameterType="com.jimmy.entity.Waiting">
+        select count(*) from waiting w
+        where w.uid = #{uid}
+        <if test="eventType!=null">
+            and w.eventType = #{eventType}
+        </if>
+    </select>
+
+    <insert id="insertWaiting" parameterType="com.jimmy.entity.Waiting">
+        insert into waiting
+        ( <include refid="Params"/> )
+        values (null, #{uid}, #{eventId}, #{eventType}, #{title})
+    </insert>
+
+    <insert id="insertWaitingList">
+        insert into waiting
+        ( <include refid="Params"/> )
+        values
+        <foreach collection="list" item="item" open="" close="" separator=",">
+            (null, #{item.uid}, #{item.eventId}, #{item.eventType}, #{item.title})
+        </foreach>
+    </insert>
+
+    <delete id="deleteWaiting" parameterType="com.jimmy.entity.Waiting">
+        delete from waiting
+        where uid = #{uid} and eventId = #{eventId} and eventType = #{eventType}
+    </delete>
+
+    <delete id="deleteById" parameterType="Integer">
+        delete from waiting
+        where id = #{id}
+    </delete>
+
+</mapper>

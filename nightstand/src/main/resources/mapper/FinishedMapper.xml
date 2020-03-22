@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.FinishedMapper">
+    <resultMap id="baseResMap" type="com.jimmy.entity.Finished">
+        <id column="id" property="id"/>
+        <result column="uid" property="uid"/>
+        <result column="eventId" property="eventId"/>
+        <result column="eventType" property="eventType"/>
+        <result column="title" property="title"/>
+        <result column="date" property="date"/>
+        <result column="comment" property="comment"/>
+        <result column="star" property="star"/>
+    </resultMap>
+
+    <sql id="Params">
+        id, uid, eventId, eventType, `date`, comment, title, star
+    </sql>
+
+    <select id="findByUid" resultMap="baseResMap" parameterType="Integer">
+        ((SELECT * from finished
+        where eventType = 'f' and uid = #{uid}
+        ORDER BY date desc
+        limit 20)
+        UNION
+        (SELECT * from finished
+        where eventType = 'b' and uid = #{uid}
+        ORDER BY date desc
+        limit 20))
+        union
+        (SELECT * from finished
+        where eventType = 'm' and uid = #{uid}
+        ORDER BY date desc
+        limit 20)
+    </select>
+    
+    <select id="findByPage" resultMap="baseResMap">
+        select * from finished
+        where uid = #{fin.uid}
+        <if test="fin.eventType != null">
+            and eventType = #{fin.eventType}
+        </if>
+        <if test="fin.date != null">
+            and `date` = #{fin.date}
+        </if>
+        <if test="sort == 'asc'">
+            order by `date` asc
+        </if>
+        <if test="sort == 'desc'">
+            order by `date` desc
+        </if>
+        limit #{start}, #{size}
+    </select>
+
+    <select id="getTotal" parameterType="com.jimmy.entity.Finished" resultType="int">
+        select count(*) from finished
+        where uid = #{uid}
+        <if test="eventType != null">
+            and eventType = #{eventType}
+        </if>
+        <if test="date != null">
+            and `date` = #{date}
+        </if>
+    </select>
+
+    <insert id="insertFinished" parameterType="com.jimmy.entity.Finished">
+        insert into finished ( <include refid="Params"/> )
+        values (null, #{uid}, #{eventId}, #{eventType}, #{date}, #{comment}, #{title}, #{star})
+    </insert>
+
+    <insert id="insertFinishedList">
+        insert into finished ( <include refid="Params"/> )
+        values
+        <foreach collection="list" item="fin" separator="," open="" close="">
+            (null, #{fin.uid}, #{fin.eventId}, #{fin.eventType}, #{fin.date}, #{fin.comment}, #{fin.title}, #{fin.star})
+        </foreach>
+    </insert>
+
+</mapper>

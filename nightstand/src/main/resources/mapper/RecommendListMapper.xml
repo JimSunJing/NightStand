@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.RecommendListMapper">
+    <resultMap id="baseResMap" type="com.jimmy.entity.RecommendList">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="title" column="title"/>
+        <result property="text" column="text"/>
+        <result property="pubTime" column="pubTime"/>
+        <result property="items" column="items" typeHandler="com.jimmy.utils.typeHandler.JsonArrayHandler"/>
+    </resultMap>
+
+    <sql id="Params">
+        id, uid, title, text, pubTime, items
+    </sql>
+
+    <select id="findById" parameterType="int" resultMap="baseResMap">
+        select * from recommendlist where id = #{id}
+    </select>
+
+    <select id="findByUid" parameterType="int" resultMap="baseResMap">
+        select * from recommendlist where uid = #{uid}
+    </select>
+
+    <select id="findPageOrderByTimeMovie" resultMap="baseResMap">
+        select * from recommendlist
+        where items->'$[0].type' = 'f'
+        order by pubTime desc
+        limit #{start}, #{size}
+    </select>
+
+    <select id="findPageOrderByTimeBook" resultMap="baseResMap">
+        select * from recommendlist
+        where items->'$[0].type' = 'b'
+        order by pubTime desc
+        limit #{start}, #{size}
+    </select>
+
+    <select id="findPageOrderByTimeMusic" resultMap="baseResMap">
+        select * from recommendlist
+        where items->'$[0].type' = 'm'
+        order by pubTime desc
+        limit #{start}, #{size}
+    </select>
+
+    <insert id="insertRecommendList" parameterType="com.jimmy.entity.RecommendList">
+        insert into recommendlist ( <include refid="Params"/> )
+        values (null, #{uid}, #{title}, #{text}, #{pubTime},
+        #{items,jdbcType=OTHER,typeHandler=com.jimmy.utils.typeHandler.JsonArrayHandler})
+    </insert>
+
+</mapper>

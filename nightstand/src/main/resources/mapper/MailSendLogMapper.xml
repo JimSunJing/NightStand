@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.MailSendLogMapper">
+
+    <insert id="insert" parameterType="com.jimmy.entity.MailSendLog">
+        insert into mail_send_log ( msgId, uid, status, routeKey, exchange, `count`, tryTime, createTime, updateTime )
+        values ( #{msgId}, #{uid}, 0, #{routeKey}, #{exchange}, 0, #{tryTime}, #{createTime}, #{updateTime})
+    </insert>
+
+    <update id="updateStatus">
+        update mail_send_log set status = #{status}, updateTime = #{date}  where msgId = #{msgId}
+    </update>
+
+    <update id="updateCount">
+        update mail_send_log set count = count + 1, updateTime = #{date} where msgId = #{msgId}
+    </update>
+
+</mapper>

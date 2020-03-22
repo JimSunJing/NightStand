@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///nightstand?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: xxxx
+  rabbitmq:
+    username: admin
+    password: admin
+    host: 192.168.116.129
+    port: 5672
+    # 开启confirms 回调
+    publisher-confirms: true
+    # 开启 returnMessage 回调
+    publisher-returns: true
+
+server:
+  port: 8081
+
+mybatis:
+  type-aliases-package: com.jimmy.entity
+  mapper-locations: classpath:mapper/*.xml
+  # 处理jdbc无法处理的类型，这里主要为了处理JSONArray类型
+  type-handlers-package: com.jimmy.utils.typeHandler
+
+# 使logging记录mybatis mapper，显示sql
+logging:
+  level:
+    com:
+      jimmy:
+        mapper: debug
+
+# caffeine缓存池名
+seconds-cache-names: UserTotalCache,pageTotalCache,scheduleCache
+minutes-cache-names: NavCache,UserInfoCache
+
+mail-exchange-name: nightstand.mail.exchange
+mail-queue-name: nightstand.mail.queue
+mail-routing-key: nightstand.mail.routeingKey

@@ -1,0 +1,32 @@
+spring:
+  rabbitmq:
+    username: admin
+    password: admin
+    host: 192.168.116.129
+    port: 5672
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 100
+  redis:
+    host: 192.168.116.129
+    port: 6379
+    database: 0
+  mail:
+    host: smtp.126.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: nightstand1234@126.com
+    password: WYFXUMWTGFISMEOY
+    port: 25
+    properties:
+      mail:
+        debug: true
+        stmp:
+          ssl.enable: true
+#          starttle.required: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+
+server:
+  port: 8082

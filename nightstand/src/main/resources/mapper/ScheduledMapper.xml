@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jimmy.mapper.ScheduledMapper">
+    <resultMap id="baseResMap" type="com.jimmy.entity.Scheduled">
+        <id column="id" property="id"/>
+        <result column="uid" property="uid"/>
+        <result column="due" property="due"/>
+        <result column="eventId" property="eventId"/>
+        <result column="eventType" property="eventType"/>
+        <result column="informed" property="informed"/>
+        <result column="achieved" property="achieved"/>
+        <result column="title" property="title"/>
+    </resultMap>
+
+    <sql id="Params">
+        (id, uid, due, eventId, eventType, title)
+    </sql>
+
+    <select id="findByDate" resultMap="baseResMap">
+        select * from scheduled
+        where due = #{date} and uid = #{uid}
+    </select>
+
+    <select id="findById" resultMap="baseResMap" parameterType="Integer">
+        select * from scheduled
+        where id = #{sid} and achieved = 0
+    </select>
+
+    <insert id="addScheduled" parameterType="com.jimmy.entity.Scheduled">
+        insert into scheduled <include refid="Params"></include>
+        values (null, #{uid}, #{due}, #{eventId}, #{eventType}, #{title})
+    </insert>
+
+    <update id="updateScheduled" parameterType="com.jimmy.entity.Scheduled">
+        update scheduled
+        set due = #{due},
+        eventId = #{eventId},
+        eventType = #{eventType},
+        informed = #{informed},
+        title = #{title}
+        where id = #{id}
+    </update>
+
+    <update id="postPoneScheduled">
+        update scheduled
+        set due = #{targetDate}
+        where id = #{sid}
+    </update>
+
+    <update id="setAchieved" parameterType="int">
+        update scheduled set achieved = 1
+        where id = #{sid};
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete from scheduled where id = #{sid}
+    </delete>
+
+
+</mapper>
