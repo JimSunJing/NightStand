@@ -139,12 +139,13 @@
     <orderEntry type="library" name="Maven: com.github.ben-manes.caffeine:caffeine:2.8.1" level="project" />
     <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:3.1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.3.4" level="project" />
-    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.7" level="project" />
+    <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.31" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-amqp:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:5.2.4.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.amqp:spring-rabbit:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.rabbitmq:amqp-client:5.7.3" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.amqp:spring-amqp:2.2.5.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.retry:spring-retry:1.2.5.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.flywaydb:flyway-core:6.0.8" level="project" />
   </component>
 </module>
