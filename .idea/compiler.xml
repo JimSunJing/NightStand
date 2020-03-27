@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="nightstand" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="nightstand" target="1.8" />
+      <module name="nightstand-entity" target="1.8" />
+      <module name="nightstand-mapper" target="1.8" />
+      <module name="nightstand-service" target="1.8" />
+      <module name="nightstandserver" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="nightstand" options="-parameters" />
+      <module name="nightstand-entity" options="-parameters" />
+      <module name="nightstand-mapper" options="-parameters" />
+      <module name="nightstand-repository" options="-parameters" />
+      <module name="nightstand-service" options="-parameters" />
+      <module name="nightstand-web" options="-parameters" />
+      <module name="nightstandserver" options="-parameters" />
+    </option>
+  </component>
+</project>
